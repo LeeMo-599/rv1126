@@ -175,6 +175,7 @@ void *video_venc_thread(void *args)
         memcpy(video_data_packet->buffer, RK_MPI_MB_GetPtr(mb), RK_MPI_MB_GetSize(mb));
         video_data_packet->video_frame_size = RK_MPI_MB_GetSize(mb);
         video_data_packet->frame_flag = naluType;
+
         video_queue->putVideoPacketQueue(video_data_packet);
         printf("#naluType = %d \n", naluType);
         RK_MPI_MB_ReleaseBuffer(mb);
@@ -207,7 +208,7 @@ void *video_venc_thread(void *args)
         return 0;
     }
     // destroy vi
-    ret = RK_MPI_VI_DisableChn(S32CAMID, 0);
+    ret = RK_MPI_VI_DisableChn(S32CAMID, 1);
     if (ret)
     {
         printf("ERROR: Destroy VI[0] error! ret=%d\n", ret);
@@ -339,4 +340,5 @@ void *push_server_thread(void *args)
     }
 
     avformat_free_context(old_arg.oc);
+    return NULL;
 }

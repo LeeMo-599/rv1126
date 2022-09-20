@@ -10,17 +10,21 @@
 VIDEO_QUEUE * video_queue = NULL;
 AUDIO_QUEUE * audio_queue = NULL;
 
-int main()
+int main(int argc, char *argv[])
 {
+    if(argc < 3)
+    {
+        printf("./rv112_ffmpeg_main stream_type url_address");
+    }
+    
     video_queue = new VIDEO_QUEUE();
     audio_queue = new AUDIO_QUEUE();
 
-    //init_all_isp_function();
+    init_all_isp_function();
     init_ffmpeg_manage_function();
-    //init_vi_ai_function();
+    init_vi_ai_function();
     init_rv1126_first_task();
     
-
     while (1)
     {
        sleep(20);
