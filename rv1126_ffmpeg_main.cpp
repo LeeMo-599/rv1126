@@ -12,10 +12,10 @@ AUDIO_QUEUE * audio_queue = NULL;
 
 int main(int argc, char *argv[])
 {
-    if(argc < 3)
+    /*if(argc < 3)
     {
         printf("./rv112_ffmpeg_main stream_type url_address");
-    }
+    }*/
     
     video_queue = new VIDEO_QUEUE();
     audio_queue = new AUDIO_QUEUE();
