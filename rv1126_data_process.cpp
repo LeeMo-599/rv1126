@@ -319,6 +319,7 @@ void *push_server_thread(void *args)
             }
         }
     }
+    
     av_write_trailer(old_arg.oc);
 
 #if 1

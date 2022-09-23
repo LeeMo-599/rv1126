@@ -4,7 +4,7 @@
 #include "ffmpeg_module.h"
 #include "ffmpeg_group.h"
 #include "rv1126_vi_ai_manage.h"
-#include "rv1126_vi_ai_map.h"
+#include "rv1126_map.h"
 
 int init_rv1126_first_task()
 {

@@ -1,6 +1,6 @@
 #include "ffmpeg_module.h"
 #include "ffmpeg_group.h"
-#include "rv1126_vi_ai_map.h"
+#include "rv1126_map.h"
 #include "ffmpeg_audio_queue.h"
 #include "ffmpeg_video_queue.h"
 #include "rv1126_task_manage.h"

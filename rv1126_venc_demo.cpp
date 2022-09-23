@@ -19,6 +19,10 @@ void *h264_venc_thread(void *args)
   FILE *save_file = fopen("output_4k.h264", "w");
 
   MEDIA_BUFFER mb = NULL;
+
+  unsigned char *ptr;
+  int frame_size = 0;
+
   while (1)
   {
     printf("Get HDMI Buffer\n");
@@ -27,6 +31,109 @@ void *h264_venc_thread(void *args)
     {
       printf("RK_MPI_SYS_GetMediaBuffer get null buffer!\n");
       break;
+    }
+
+    ptr = (unsigned char *)RK_MPI_MB_GetPtr(mb);
+    if (ptr == NULL)
+    {
+      break;
+    }
+
+    frame_size = RK_MPI_MB_GetSize(mb);
+    if (frame_size <= 0)
+    {
+      //zlog_error(get_category(), "[VENC][PROC] task id: %u, venc id: %u, get frame size: %d error", frame_size, venc_arg.task_id, venc_arg.venc_id);
+      break;
+    }
+
+    for (int i = 0; i < frame_size; i++)
+    {
+      printf("frame_size = %d\n", frame_size);
+      if ((ptr[i + 1] == 0) && (ptr[i + 2] == 0) &&
+          (ptr[i + 3] == 1) && ((ptr[i + 4] & 0x0f) == 0x07))
+      {
+        printf("This is a sps\n");
+      }
+      else if ((ptr[i + 1] == 0) && (ptr[i + 2] == 0) &&
+               (ptr[i + 3] == 1) && ((ptr[i + 4] & 0x0f) == 0x08))
+      {
+        printf("This is a pps\n");
+      }
+      else if ((ptr[i + 1] == 0) && (ptr[i + 2] == 0) &&
+               (ptr[i + 3] == 1) && ((ptr[i + 4] & 0x0f) == 0x05))
+      {
+        printf("This is a IDR \n");
+      }
+      else
+      {
+         printf("This is a COMMON frame \n");
+      }
+    }
+
+    fwrite(RK_MPI_MB_GetPtr(mb), 1, RK_MPI_MB_GetSize(mb), save_file);
+    RK_MPI_MB_ReleaseBuffer(mb);
+  }
+}
+
+void *h265_venc_thread(void *args)
+{
+  pthread_detach(pthread_self());
+  FILE *save_file = fopen("output_4k.h264", "w");
+
+  MEDIA_BUFFER mb = NULL;
+
+  unsigned char *ptr;
+  int frame_size = 0;
+
+  while (1)
+  {
+    printf("Get HDMI Buffer\n");
+    mb = RK_MPI_SYS_GetMediaBuffer(RK_ID_VENC, 0, -1);
+    if (!mb)
+    {
+      printf("RK_MPI_SYS_GetMediaBuffer get null buffer!\n");
+      break;
+    }
+
+    ptr = (unsigned char *)RK_MPI_MB_GetPtr(mb);
+    if (ptr == NULL)
+    {
+      break;
+    }
+
+    frame_size = RK_MPI_MB_GetSize(mb);
+    if (frame_size <= 0)
+    {
+      //zlog_error(get_category(), "[VENC][PROC] task id: %u, venc id: %u, get frame size: %d error", frame_size, venc_arg.task_id, venc_arg.venc_id);
+      break;
+    }
+
+    for (int i = 0; i < frame_size; i++)
+    {
+      if ((ptr[i + 0] == 0) && (ptr[i + 1] == 0) && (ptr[i + 2] == 0) && (ptr[i + 3] == 0x01) && (ptr[i + 5] == 0x01))
+      {
+        int value = (ptr[i + 4] & 0x7E) >> 1;
+        if (value == 19)
+        {
+          printf("This is a HEVC IDR Frame\n");
+        }
+        else if(value == 34)
+        {
+          printf("This is a HEVC PPS Frame\n");
+        }
+        else if(value == 33)
+        {
+          printf("This is a HEVC SPS Frame\n");
+        }
+        else if(value == 32)
+        {
+          printf("This is a HEVC VPS Frame\n");
+        }
+        else
+        {
+           printf("This is a COMMON Frame\n");
+        }
+      }
     }
 
     fwrite(RK_MPI_MB_GetPtr(mb), 1, RK_MPI_MB_GetSize(mb), save_file);
@@ -81,6 +188,8 @@ int main()
 
   VENC_CHN_ATTR_S venc_chn_attr;
   memset(&venc_chn_attr, 0, sizeof(venc_chn_attr));
+
+#if 0
   venc_chn_attr.stVencAttr.enType = RK_CODEC_TYPE_H264;
   venc_chn_attr.stRcAttr.enRcMode = VENC_RC_MODE_H264CBR;
   venc_chn_attr.stRcAttr.stH264Cbr.u32Gop = 30;
@@ -90,6 +199,18 @@ int main()
   venc_chn_attr.stRcAttr.stH264Cbr.fr32DstFrameRateNum = 30;
   venc_chn_attr.stRcAttr.stH264Cbr.u32SrcFrameRateDen = 1;
   venc_chn_attr.stRcAttr.stH264Cbr.u32SrcFrameRateNum = 30;
+#endif
+
+  venc_chn_attr.stVencAttr.enType = RK_CODEC_TYPE_H265;
+  venc_chn_attr.stRcAttr.enRcMode = VENC_RC_MODE_H265CBR;
+  venc_chn_attr.stRcAttr.stH265Cbr.u32Gop = 30;
+  venc_chn_attr.stRcAttr.stH265Cbr.u32BitRate = u32Width * u32Height;
+  // frame rate: in 30/1, out 30/1.
+  venc_chn_attr.stRcAttr.stH265Cbr.fr32DstFrameRateDen = 1;
+  venc_chn_attr.stRcAttr.stH265Cbr.fr32DstFrameRateNum = 30;
+  venc_chn_attr.stRcAttr.stH265Cbr.u32SrcFrameRateDen = 1;
+  venc_chn_attr.stRcAttr.stH265Cbr.u32SrcFrameRateNum = 30;
+
   venc_chn_attr.stVencAttr.imageType = IMAGE_TYPE_NV12;
   venc_chn_attr.stVencAttr.u32PicWidth = u32Width;
   venc_chn_attr.stVencAttr.u32PicHeight = u32Height;
@@ -120,7 +241,9 @@ int main()
   }
 
   pthread_t pid;
-  ret = pthread_create(&pid, NULL, h264_venc_thread, NULL);
+  //ret = pthread_create(&pid, NULL, h264_venc_thread, NULL);
+
+  ret = pthread_create(&pid, NULL, h265_venc_thread, NULL);
 
   while (1)
   {
@@ -128,23 +251,25 @@ int main()
   }
 
   ret = RK_MPI_SYS_UnBind(&stSrcChn, &stDestChn);
-  if (ret) {
+  if (ret)
+  {
     printf("ERROR: UnBind VI[0] and VENC[0] error! ret=%d\n", ret);
     return 0;
   }
   // destroy venc before vi
   ret = RK_MPI_VENC_DestroyChn(0);
-  if (ret) {
+  if (ret)
+  {
     printf("ERROR: Destroy VENC[0] error! ret=%d\n", ret);
     return 0;
   }
   // destroy vi
   ret = RK_MPI_VI_DisableChn(s32CamId, 0);
-  if (ret) {
+  if (ret)
+  {
     printf("ERROR: Destroy VI[0] error! ret=%d\n", ret);
     return 0;
   }
-
 
   return 0;
 }

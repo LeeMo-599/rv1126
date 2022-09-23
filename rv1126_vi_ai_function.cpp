@@ -1,6 +1,6 @@
 #include "rv1126_vi_ai_manage.h"
 #include "rv1126_task_function.h"
-#include "rv1126_vi_ai_map.h"
+#include "rv1126_map.h"
 
 int init_vi_ai_function()
 {
