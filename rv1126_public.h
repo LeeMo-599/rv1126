@@ -22,6 +22,7 @@
 #define CAM_DEVICE_NAME "rkispp_scale0" 
 #define AUDIO_ALSA_PATH "default:CARD=rockchiprk809co"
 
+
 typedef struct
 {
     unsigned int id;

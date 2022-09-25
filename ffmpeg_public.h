@@ -22,14 +22,21 @@ extern "C"
 #define HEIGHT 1080
 #define GOPSIZE 5
 
+#if 0
 typedef enum
 {
     URL_TYPE_NONE = 0,
-    LOCAL,
-    RTMP,
-    SRT,
-
+    LOCAL = 1,
+    RTMP = 2,
+    SRT = 3 ,
+    
 } E_URL_TYPE;
+#endif
+
+#define RTMP 0
+#define SRT 1
+#define LOCAL 2
+
 
 typedef struct
 {
@@ -47,7 +54,8 @@ typedef struct
     unsigned int task_id;
     unsigned int task_random_value;
     unsigned int url_id;
-    E_URL_TYPE url_type;
+    //E_URL_TYPE url_type;
+    int url_type;
     char url_addr[MAX_URL_ADDR_LENGTH];
     enum AVCodecID video_codec;
     enum AVCodecID audio_codec;

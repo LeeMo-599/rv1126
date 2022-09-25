@@ -6,7 +6,7 @@
 #include "rv1126_vi_ai_manage.h"
 #include "rv1126_map.h"
 
-int init_rv1126_first_task()
+int init_rv1126_first_task(int url_type, char * url_address)
 {
     int ret;
     S_FFMPEG_GROUP *group = (S_FFMPEG_GROUP *)malloc(sizeof(S_FFMPEG_GROUP));
@@ -16,12 +16,15 @@ int init_rv1126_first_task()
     }
 
     group->url_id = 0;
-    group->url_type = LOCAL;
+    group->url_type = url_type;
+    //group->url_type = 1;
+    group->url_type = url_type;
     group->video_codec = AV_CODEC_ID_H264;
     group->audio_codec = AV_CODEC_ID_AAC;
-    memcpy(group->url_addr, "test.ts", strlen("test.ts"));
+    //memcpy(group->url_addr, "test.ts", strlen("test.ts"));
     //memcpy(group->url_addr, "rtmp://10.0.0.88:1935/live/cz01", strlen("rtmp://10.0.0.88:1935/live/cz01"));
     //memcpy(group->url_addr, "srt://10.0.0.88:8080?streamid=uplive.sls.com/live/cz_01", strlen("srt://10.0.0.88:8080?streamid=uplive.sls.com/live/cz_01"));
+    memcpy(group->url_addr, url_address, strlen(url_address));
     init_stream_format_context(group);
     set_ffmpeg_group(group->url_id, group);
   

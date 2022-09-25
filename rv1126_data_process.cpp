@@ -19,17 +19,17 @@ AVPacket *get_video_packet_from_queue(AVStream *st, AVPacket *pkt)
         }
 #if 1
         pkt->size = video_data_packet->video_frame_size;
-        printf("video_pkt_size = %d\n", pkt->size);
+        //printf("video_pkt_size = %d\n", pkt->size);
         memcpy(pkt->buf->data, video_data_packet->buffer, video_data_packet->video_frame_size);
         pkt->data = pkt->buf->data;
 
-        printf("frame_flag = %d\n", video_data_packet->frame_flag);
-        pkt->flags |= AV_PKT_FLAG_KEY;
+        //printf("frame_flag = %d\n", video_data_packet->frame_flag);
+        //pkt->flags |= AV_PKT_FLAG_KEY;
 
         if ((video_data_packet->frame_flag == VENC_NALU_IDRSLICE) || (video_data_packet->frame_flag == VENC_NALU_ISLICE))
         {
             printf("DETECT IDR Frame\n");
-            //pkt->flags |= AV_PKT_FLAG_KEY;
+            pkt->flags |= AV_PKT_FLAG_KEY;
         }
         
 #endif
@@ -60,7 +60,7 @@ AVPacket *get_audio_packet_from_queue(AVPacket *pkt)
         }
 
         pkt->size = audio_data_packet->audio_frame_size;
-        printf("audio_pkt_size = %d\n", pkt->size);
+        //printf("audio_pkt_size = %d\n", pkt->size);
         memcpy(pkt->buf->data, audio_data_packet->buffer, audio_data_packet->audio_frame_size);
         pkt->data = pkt->buf->data;
 
@@ -300,7 +300,7 @@ void *push_server_thread(void *args)
 
         if (ret <= 0)
         {
-            printf("handle_video\n");
+            //printf("handle_video\n");
             ret = handle_video_packet(old_arg.oc, &old_arg.video_st);
             if (ret == -1)
             {
@@ -310,7 +310,7 @@ void *push_server_thread(void *args)
         }
         else
         {
-            printf("handle_audio\n");
+            //printf("handle_audio\n");
             ret = handle_audio_packet(old_arg.oc, &old_arg.audio_st);
             if (ret == -1)
             {

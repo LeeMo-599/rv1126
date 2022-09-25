@@ -12,18 +12,22 @@ AUDIO_QUEUE * audio_queue = NULL;
 
 int main(int argc, char *argv[])
 {
-    /*if(argc < 3)
+    if(argc < 3)
     {
-        printf("./rv112_ffmpeg_main stream_type url_address");
-    }*/
-    
+        printf("Please Input ./rv1126_ffmpeg_main stream_type url_address. Notice URL_TYPE: 0-->RTMP  1-->SRT  2-->LOCAL\n");
+        return -1;
+    }
+
+    int url_type = atoi(argv[1]);
+    char * url_address = argv[2];
+
     video_queue = new VIDEO_QUEUE();
     audio_queue = new AUDIO_QUEUE();
 
     init_all_isp_function();
     init_ffmpeg_manage_function();
     init_vi_ai_function();
-    init_rv1126_first_task();
+    init_rv1126_first_task(url_type, url_address);
     
     while (1)
     {

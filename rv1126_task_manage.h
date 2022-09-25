@@ -3,6 +3,6 @@
 
 #include "rv1126_task_function.h"
 
-int init_rv1126_first_task();
+int init_rv1126_first_task(int url_type, char * url_address);
 
 #endif
