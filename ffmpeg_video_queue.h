@@ -1,17 +1,17 @@
 #ifndef _FFMPEG_VIDEO_QUEUE_H                                               
 #define _FFMPEG_VIDEO_QUEUE_H  
 
-#include "ffmpeg_public.h"
+#include "rkmedia_ffmpeg_config.h"
 #include <pthread.h>
 #include <queue>
 
 using namespace std;
 
-#define MAX_PACK_BUFFER_SIZE (1024*1024 * 2)
+#define MAX_VIDEO_BUFFER_SIZE (1024*1024 * 3)
 
 typedef struct _video_data_packet_t
 {
-    unsigned char buffer[MAX_PACK_BUFFER_SIZE];
+    unsigned char buffer[MAX_VIDEO_BUFFER_SIZE];
     int video_frame_size;
     int frame_flag;
     
@@ -32,7 +32,6 @@ public:
     VIDEO_QUEUE();
 
     ~VIDEO_QUEUE();
-
 
 //==========Mat Queueu ==================
 

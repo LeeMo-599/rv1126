@@ -24,11 +24,11 @@ typedef enum rkVI_CHN_BUF_TYPE {
 } VI_CHN_BUF_TYPE;
 
 typedef struct rkVI_CHN_ATTR_S {
-  const RK_CHAR *pcVideoNode;
-  RK_U32 u32Width;
-  RK_U32 u32Height;
-  IMAGE_TYPE_E enPixFmt;
-  RK_U32 u32BufCnt;          // VI capture video buffer cnt.
+  const RK_CHAR *pcVideoNode; //VIDEO视频节点路径
+  RK_U32 u32Width;  //视频输入的宽度，一般和CMOS摄像头或者外设的宽度一致
+  RK_U32 u32Height; //视频输入的高度，一般和CMOS摄像头或者外设的高度一致
+  IMAGE_TYPE_E enPixFmt; //视频输入的图像格式，默认是NV12(IMAGE_TYPE_NV12)
+  RK_U32 u32BufCnt;          // VI capture video buffer cnt.缓冲区计数
   VI_CHN_BUF_TYPE enBufType; // VI capture video buffer type.
   VI_CHN_WORK_MODE enWorkMode;
 } VI_CHN_ATTR_S;

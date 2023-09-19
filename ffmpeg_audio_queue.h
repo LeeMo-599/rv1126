@@ -1,17 +1,17 @@
 #ifndef _FFMPEG_AUDIO_QUEUE_H                                               
 #define _FFMPEG_AUDIO_QUEUE_H  
 
-#include "ffmpeg_public.h"
+#include "rkmedia_ffmpeg_config.h"
 #include <pthread.h>
 #include <queue>
 
 using namespace std;
 
-#define MAX_PACK_BUFFER_SIZE (1024 * 1024 * 2)
+#define MAX_AUDIO_BUFFER_SIZE (1024 * 1024 * 3)
 
 typedef struct audio_data_packet_t
 {
-    unsigned char buffer[MAX_PACK_BUFFER_SIZE];
+    unsigned char buffer[MAX_AUDIO_BUFFER_SIZE];
     int audio_frame_size;
 
 }audio_data_packet;
@@ -31,8 +31,6 @@ public:
     AUDIO_QUEUE();
 
     ~AUDIO_QUEUE();
-
-    AUDIO_QUEUE * queue;
 
     //入队函数
     int putAudioPacketQueue(audio_data_packet * audio_packet);

@@ -16,12 +16,13 @@ typedef enum rk_AI_LAYOUT_E {
 } AI_LAYOUT_E;
 
 typedef struct rkAI_CHN_ATTR_S {
-  RK_CHAR *pcAudioNode;
-  SAMPLE_FORMAT_E enSampleFormat;
-  RK_U32 u32Channels;
-  RK_U32 u32SampleRate;
-  RK_U32 u32NbSamples;
-  AI_LAYOUT_E enAiLayout;
+  RK_CHAR *pcAudioNode; //音频设备节点，在RV1126音频采集路径是用arecord -L去查询。默认是default
+  SAMPLE_FORMAT_E enSampleFormat; //音频采样深度
+  RK_U32 u32Channels; //音频通道数，默认是2
+  RK_U32 u32SampleRate; //采样率
+  RK_U32 u32NbSamples;  //音频采样个数
+  AI_LAYOUT_E enAiLayout; //音频布局
+
 } AI_CHN_ATTR_S;
 
 #define AI_TALKVQE_MASK_AEC 0x1

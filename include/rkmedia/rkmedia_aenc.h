@@ -36,15 +36,15 @@ typedef struct rkAENC_ATTR_G726_S {
 } AENC_ATTR_G726_S;
 
 typedef struct rkAENC_CHN_ATTR_S {
-  CODEC_TYPE_E enCodecType; /*payload type ()*/
-  RK_U32 u32Bitrate;
-  RK_U32 u32Quality;
+  CODEC_TYPE_E enCodecType; //音频编码类型
+  RK_U32 u32Bitrate;  //音频编码码率
+  RK_U32 u32Quality;  //音频编码质量
   union {
-    AENC_ATTR_AAC_S stAencAAC;
-    AENC_ATTR_MP2_S stAencMP2;
-    AENC_ATTR_G711A_S stAencG711A;
-    AENC_ATTR_G711U_S stAencG711U;
-    AENC_ATTR_G726_S stAencG726;
+    AENC_ATTR_AAC_S stAencAAC;  //AAC结构体
+    AENC_ATTR_MP2_S stAencMP2;  //MP2结构体
+    AENC_ATTR_G711A_S stAencG711A; //G711A结构体
+    AENC_ATTR_G711U_S stAencG711U; //G711U结构体
+    AENC_ATTR_G726_S stAencG726;   //G726结构体
   };
 
 } AENC_CHN_ATTR_S;

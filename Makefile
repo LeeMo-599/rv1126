@@ -1,7 +1,7 @@
 hide := @
 ECHO := echo
 
-G++ := /opt/rv1126_gcc/prebuilts/gcc/linux-x86/arm/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++
+G++ := /opt/rv1126_rv1109_linux_sdk_v1.8.0_20210224/prebuilts/gcc/linux-x86/arm/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++
 CFLAGS := -I./include/rkmedia \
 			-I./include/rkaiq/common \
 			-I./include/rkaiq/xcore \
@@ -11,28 +11,20 @@ CFLAGS := -I./include/rkmedia \
 			-I./rknn_rockx_include \
 			-I./im2d_api          \
 			-I./arm_libx264/include \
-			-I./arm32_ffmpeg_srt/include \
-			-I/ 
+			-I./arm32_ffmpeg_srt/include  
 
-LIB_FILES := -L./rv1126_lib -L./arm_libx264/lib -L./arm32_ffmpeg_srt/lib #-L/opt/arm32_ffmpeg/lib
+LIB_FILES := -L./rv1126_lib -L./opt/arm_libx264/lib -L./opt/arm32_ffmpeg_srt/lib -L./opt/arm_libsrt/lib -L./opt/arm_openssl/lib 
 
 LD_FLAGS := -lpthread -leasymedia -ldrm -lrockchip_mpp \
 	        -lavformat -lavcodec -lswresample -lavutil \
 			-lasound -lv4l2 -lv4lconvert -lrga \
 			-lRKAP_ANR -lRKAP_Common -lRKAP_3A \
-			-lmd_share -lrkaiq -lod_share -lrknn_api \
-			-lrockx -lx264 	
+			-lmd_share -lrkaiq -lod_share  \
+			-lx264 -lsrt -lssl -lcrypto 	
 			
-
 CFLAGS += -DRKAIQ
 
-SAMPLE_COMMON := common/sample_common_isp.c
-SAMPLE_COMMON_02 := sample_common_isp.c
-
 all:
-	$(G++) rv1126_ffmpeg_main.cpp rv1126_isp_function.cpp rv1126_vi_ai_function.cpp rv1126_vi_ai_manage.cpp  rv1126_task_function.cpp rv1126_map.cpp rv1126_task_manage.cpp ffmpeg_module.cpp ffmpeg_group.cpp ffmpeg_video_queue.cpp ffmpeg_audio_queue.cpp rv1126_data_process.cpp $(SAMPLE_COMMON_02) $(CFLAGS) $(LIB_FILES) $(LD_FLAGS) -o rv1126_ffmpeg_main
-	$(G++) rv1126_venc_demo.cpp $(SAMPLE_COMMON_02) $(CFLAGS) $(LIB_FILES) $(LD_FLAGS) -o rv1126_venc_demo
-	$(G++) rv1126_aenc_demo.cpp $(SAMPLE_COMMON_02) $(CFLAGS) $(LIB_FILES) $(LD_FLAGS) -o rv1126_aenc_demo
-	#$(G++) rv1126_task_function_test.cpp rv1126_task_function.cpp rv1126_vi_ai_map.cpp $(SAMPLE_COMMON_02) $(CFLAGS) $(LIB_FILES) $(LD_FLAGS) -o rv1126_task_function_test
+	$(G++) ffmpeg_audio_queue.cpp ffmpeg_video_queue.cpp rkmedia_assignment_manage.cpp rkmedia_container.cpp rkmedia_data_process.cpp rkmedia_ffmpeg_config.cpp rkmedia_module.cpp rkmedia_module_function.cpp rv1126_ffmpeg_main.cpp rv1126_isp_function.cpp sample_common_isp.c   $(CFLAGS) $(LIB_FILES) $(LD_FLAGS) -o rv1126_ffmpeg_main
 	$(hide)$(ECHO) "Build Done ..."
 

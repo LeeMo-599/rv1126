@@ -171,9 +171,9 @@ typedef struct rkVENC_ATTR_H265_S {
 /* the attribute of the Venc*/
 typedef struct rkVENC_ATTR_S {
 
-  CODEC_TYPE_E enType;    // RW; the type of encodec
-  IMAGE_TYPE_E imageType; // the type of input image
-  RK_U32 u32VirWidth;  // stride width, same to buffer_width, must greater than
+  CODEC_TYPE_E enType;    // 编码器协议类型 RW; the type of encodec
+  IMAGE_TYPE_E imageType; // 输入图像类型，通常来说venc的imageType和vi的imageType是一致的 the type of input image
+  RK_U32 u32VirWidth;  //  stride width, same to buffer_width, must greater than
                        // width, often set vir_width=(width+15)&(~15)
   RK_U32 u32VirHeight; // stride height, same to buffer_height, must greater
                        // than height, often set vir_height=(height+15)&(~15)
@@ -183,8 +183,8 @@ typedef struct rkVENC_ATTR_S {
                        // Jpege/MJpege:   default:Baseline
   RK_BOOL bByFrame;    // RW; Range:[0,1];
                        // get stream mode is slice mode or frame mode
-  RK_U32 u32PicWidth;  // RW; width of a picture to be encoded, in pixel
-  RK_U32 u32PicHeight; // RW; height of a picture to be encoded, in pixel
+  RK_U32 u32PicWidth;  // 编码图像宽度
+  RK_U32 u32PicHeight; // 编码图像高度
   VENC_ROTATION_E enRotation;
   union {
     VENC_ATTR_H264_S stAttrH264e;   // attributes of H264e
@@ -205,9 +205,9 @@ typedef struct rkVENC_GOP_ATTR_S {
 
 /* the attribute of the venc chnl*/
 typedef struct rkVENC_CHN_ATTR_S {
-  VENC_ATTR_S stVencAttr;    // the attribute of video encoder
-  VENC_RC_ATTR_S stRcAttr;   // the attribute of rate  ctrl
-  VENC_GOP_ATTR_S stGopAttr; // the attribute of gop
+  VENC_ATTR_S stVencAttr;    // 编码器基础属性结构体 the attribute of video encoder
+  VENC_RC_ATTR_S stRcAttr;   // 编码码率控制属性结构体 the attribute of rate  ctrl
+  VENC_GOP_ATTR_S stGopAttr; // 编码器GOP属性结构体 the attribute of gop
 } VENC_CHN_ATTR_S;
 
 /* The param of H264e cbr*/
